@@ -10,12 +10,10 @@ terraform {
   }
 }
 
-provider "hcloud" {
-
-}
+provider "hcloud" { }
 
 resource "hcloud_ssh_key" "default" {
-  name       = "Terraform Example"
+  name       = "Terraform key"
   public_key = file("~/.ssh/id_ed25519.pub")
 }
 

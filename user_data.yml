@@ -5,6 +5,7 @@ write_files:
   content: |
     {pkgs, ...}:
     {
+      nixpkgs.config.allowUnfree = true;
       environment.systemPackages = with pkgs; [
         vim
         redpanda
@@ -12,4 +13,4 @@ write_files:
       virtualisation.docker.enable = true;
     }
 runcmd:
-  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIXPKGS_ALLOW_UNFREE=1 NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-22.11 bash 2>&1 | tee /tmp/infect.log
+  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-22.11 bash 2>&1 | tee /tmp/infect.log
