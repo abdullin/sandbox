@@ -5,7 +5,11 @@ write_files:
   content: |
     {pkgs, ...}:
     {
-      environment.systemPackages = with pkgs; [ vim ];
+      environment.systemPackages = with pkgs; [
+        vim
+        redpanda
+      ];
+      virtualisation.docker.enable = true;
     }
 runcmd:
-  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=digitalocean NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-22.11 bash 2>&1 | tee /tmp/infect.log
+  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIXPKGS_ALLOW_UNFREE=1 NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-22.11 bash 2>&1 | tee /tmp/infect.log

@@ -1,4 +1,5 @@
 // https://medium.com/@orestovyevhen/set-up-infrastructure-in-hetzner-cloud-using-terraform-ce85491e92d
+//https://codeberg.org/Lenny/owncast-terraform-hetzner/src/branch/main/main.tf
 
 terraform {
   required_providers {
@@ -33,3 +34,6 @@ resource "hcloud_server" "streaming" {
   user_data = file("user_data.yml")
 }
 
+output "instance_ip" {
+  value = hcloud_server.streaming.ipv4_address
+}
