@@ -17,12 +17,44 @@ resource "hcloud_ssh_key" "default" {
   public_key = file("~/.ssh/id_ed25519.pub")
 }
 
+resource "hcloud_firewall" "dev-firewall" {
+  name = "dev-firewall"
+  rule {
+    direction = "in"
+    protocol  = "icmp"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
+
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "22"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
+
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "8080"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
+}
 
 resource "hcloud_server" "streaming" {
   name        = "streaming"
   image       = "debian-11"
   server_type = "cx11"
   location    = "fsn1"
+  firewall_ids = [hcloud_firewall.dev-firewall.id]
 
   ssh_keys    = [hcloud_ssh_key.default.id]
   public_net {
