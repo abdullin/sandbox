@@ -13,7 +13,7 @@ write_files:
 
       networking.firewall = {
         enable = true;
-        allowedTCPPorts = [ 8080 22 ];
+        allowedTCPPorts = [ 8080 22 9092 ];
       };
       virtualisation.docker.enable = true;
     }
