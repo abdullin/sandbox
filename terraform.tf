@@ -17,6 +17,12 @@ resource "hcloud_ssh_key" "default" {
   public_key = file("~/.ssh/id_ed25519.pub")
 }
 
+
+data "http" "ip" {
+  url = "https://ifconfig.me/ip"
+}
+
+
 resource "hcloud_firewall" "dev-firewall" {
   name = "dev-firewall"
   rule {
@@ -31,20 +37,9 @@ resource "hcloud_firewall" "dev-firewall" {
   rule {
     direction = "in"
     protocol  = "tcp"
-    port      = "22"
+    port      = "22-29092"
     source_ips = [
-      "0.0.0.0/0",
-      "::/0"
-    ]
-  }
-
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "8080"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0"
+      "${data.http.ip.response_body}/32",
     ]
   }
 }
