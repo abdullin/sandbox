@@ -1,0 +1,26 @@
+#cloud-config
+write_files:
+- path: /etc/nixos/host.nix
+  permissions: '0644'
+  content: |
+    {pkgs, ...}:
+    {
+      nixpkgs.config.allowUnfree = true;
+      environment.systemPackages = with pkgs; [
+        vim
+        clickhouse
+      ];
+
+      networking.firewall = {
+        enable = true;
+        allowedTCPPorts = [
+          22
+          8123 # Clickhouse HTTP API
+          8443 # Default SSL port
+          9000 # Clickhouse TCP protocol
+        ];
+      };
+      virtualisation.docker.enable = true;
+    }
+runcmd:
+  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIXOS_IMPORT=./host.nix NIX_CHANNEL=nixos-22.11 bash 2>&1 | tee /tmp/infect.log

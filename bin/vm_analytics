@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+IP=`terraform output --raw analytics_ip`
+kitty +kitten ssh root@$IP

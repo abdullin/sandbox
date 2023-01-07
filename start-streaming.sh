@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-REMOTE=$(terraform output --raw instance_ip)
+REMOTE=$(terraform output --raw analytics_ip)
 echo $REMOTE
 
 # drop this IP from hosts

@@ -47,7 +47,7 @@ resource "hcloud_firewall" "dev-firewall" {
 resource "hcloud_server" "streaming" {
   name        = "streaming"
   image       = "debian-11"
-  server_type = "cx11"
+  server_type = "cpx11"
   location    = "fsn1"
   firewall_ids = [hcloud_firewall.dev-firewall.id]
 
@@ -56,9 +56,28 @@ resource "hcloud_server" "streaming" {
     ipv4_enabled = true
     ipv6_enabled = true
   }
-  user_data = file("user_data.yml")
+  user_data = file("init_streaming.yml")
 }
 
-output "instance_ip" {
+resource "hcloud_server" "analytics" {
+  name        = "analytics"
+  image       = "debian-11"
+  server_type = "cpx11"
+  location    = "fsn1"
+  firewall_ids = [hcloud_firewall.dev-firewall.id]
+
+  ssh_keys    = [hcloud_ssh_key.default.id]
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = true
+  }
+  user_data = file("init_analytics.yml")
+}
+
+output "streaming_ip" {
   value = hcloud_server.streaming.ipv4_address
+}
+
+output "analytics_ip" {
+  value = hcloud_server.analytics.ipv4_address
 }
